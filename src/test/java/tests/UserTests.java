@@ -1,7 +1,6 @@
 package tests;
 
 import io.restassured.RestAssured;
-import io.restassured.authentication.CertificateAuthSettings;
 import io.restassured.response.Response;
 import org.junit.Test;
 
@@ -9,10 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import net.serenitybdd.junit.runners.SerenityRunner;
+import org.junit.runner.RunWith;
 
+@RunWith(SerenityRunner.class)
 public class UserTests {
 
     @Test
@@ -30,7 +31,7 @@ public class UserTests {
 
     @Test
     public void postUser() {
-        Map<String,String> User = new HashMap<>();
+        Map<String, String> User = new HashMap<>();
         User.put("name", "Sizwe Bee");
         User.put("username", "SizeBee");
         User.put("email", "sizbee@webmail.com");
@@ -40,6 +41,6 @@ public class UserTests {
                 .body(User)
                 .when().post("https://jsonplaceholder.typicode.com/users").then()
                 .statusCode(201);
-}
+    }
 
 }
