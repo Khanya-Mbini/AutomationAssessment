@@ -3,6 +3,7 @@ package tests;
 import net.serenitybdd.junit.runners.SerenityRunner;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -23,67 +24,64 @@ public class BankingTests {
     @Steps
     BankingSteps bankingSteps;
 
+    @Before
+    public void initBankingStepsDriver(){
+        bankingSteps.setWebDriver(driver);
+    }
+
     @Test
     public void makeSingleDeposit(){
-        bankingSteps.loginAsCustomer(driver);
-        bankingSteps.selectCustomer(driver, 1);
-        bankingSteps.doDeposit(driver, "1500");
-        bankingSteps.depositIsSuccessful(driver);
-        bankingSteps.logout(driver);
+        bankingSteps.loginAndSelectCustomer(2);
+        bankingSteps.doDeposit("1500");
+        bankingSteps.depositIsSuccessful();
+        bankingSteps.logout();
     }
 
     @Test
     public void makeMultipleDeposits(){
-        bankingSteps.loginAsCustomer(driver);
-        bankingSteps.selectCustomer(driver, 1);
+        bankingSteps.loginAndSelectCustomer(2);
         for (int i = 0; i < 3; ++i){
-            bankingSteps.selectCustomerAccount(driver, i);
-            bankingSteps.doDeposit(driver, "1500");
-            bankingSteps.depositIsSuccessful(driver);
+            bankingSteps.selectCustomerAccount(i);
+            bankingSteps.doDeposit("1500");
+            bankingSteps.depositIsSuccessful();
         }
-        bankingSteps.logout(driver);
+        bankingSteps.logout();
     }
 
     @Test
-    public void performMultipleTransactions(){
-        bankingSteps.loginAsCustomer(driver);
-        bankingSteps.selectCustomer(driver, 1);
-        bankingSteps.clearAllTransactions(driver);
-        bankingSteps.doDeposit(driver, "31459");
-        bankingSteps.depositIsSuccessful(driver);
-        bankingSteps.checkTransactionCreated(driver, "31459", "Credit");
-        bankingSteps.doWithdrawal(driver, "31459");
-        bankingSteps.validateBalances(driver, "0");
-        bankingSteps.checkTransactionCreated(driver, "31459", "Debit");
-        bankingSteps.logout(driver);
+    public void performMultipleTransactions() throws Throwable {
+        bankingSteps.loginAndSelectCustomer(2);
+        bankingSteps.doDeposit("31459");
+        bankingSteps.depositIsSuccessful();
+        bankingSteps.checkTransactionCreated("31459", "Credit");
+        bankingSteps.doWithdrawal("31459");
+        bankingSteps.validateBalances("0");
+        bankingSteps.checkTransactionCreated("31459", "Debit");
+        bankingSteps.logout();
     }
 
     @Test
-    public void testWithJSONData() throws Throwable{
+    public void testWithJSONData() throws Throwable {
         FileReader reader = new FileReader("src/main/resources/support/scenarioData.json");
         JSONParser parser = new JSONParser();
         JSONObject data = (JSONObject) parser.parse(reader);
 
-        bankingSteps.loginAsCustomer(driver);
-        bankingSteps.selectCustomer(driver, Integer.parseInt((String)data.get("customerIndex")));
-        bankingSteps.clearAllTransactions(driver);
-        bankingSteps.doDeposit(driver, (String)data.get("depositAmount"));
-        bankingSteps.depositIsSuccessful(driver);
-        bankingSteps.checkTransactionCreated(driver, (String)data.get("depositAmount"), "Credit");
-        bankingSteps.doWithdrawal(driver, (String)data.get("withdrawalAmount"));
-        bankingSteps.validateBalances(driver, "0");
-        bankingSteps.checkTransactionCreated(driver, (String)data.get("withdrawalAmount"), "Debit");
-        bankingSteps.logout(driver);
+        bankingSteps.loginAndSelectCustomer(Integer.parseInt((String)data.get("customerIndex")));
+        bankingSteps.doDeposit((String)data.get("depositAmount"));
+        bankingSteps.depositIsSuccessful();
+        bankingSteps.checkTransactionCreated((String)data.get("depositAmount"), "Credit");
+        bankingSteps.doWithdrawal((String)data.get("withdrawalAmount"));
+        bankingSteps.validateBalances("0");
+        bankingSteps.checkTransactionCreated((String)data.get("withdrawalAmount"), "Debit");
+        bankingSteps.logout();
     }
 
     @Test
     public void unsuccessfulWithdrawal(){
-        bankingSteps.loginAsCustomer(driver);
-        bankingSteps.selectCustomer(driver, 1);
-        bankingSteps.clearAllTransactions(driver);
-        bankingSteps.doWithdrawal(driver, "1500");
-        bankingSteps.unsuccessfulWithdrawal(driver);
-        bankingSteps.logout(driver);
+        bankingSteps.loginAndSelectCustomer(2);
+        bankingSteps.doWithdrawal("1500");
+        bankingSteps.unsuccessfulWithdrawal();
+        bankingSteps.logout();
 
     }
 }
