@@ -30,7 +30,7 @@ public class UserTests {
     }
 
     @Test
-    public void postUser() {
+    public void CreateNewUser() {
         Map<String, String> User = new HashMap<>();
         User.put("name", "Sizwe Bee");
         User.put("username", "SizeBee");
