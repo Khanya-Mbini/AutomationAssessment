@@ -9,11 +9,9 @@ import org.openqa.selenium.WebDriver;
 
 import steps.BankingSteps;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
-import java.util.Iterator;
 
 @RunWith(SerenityRunner.class)
 
@@ -62,7 +60,7 @@ public class BankingTests {
 
     @Test
     public void testWithJSONData() throws Throwable{
-        FileReader reader = new FileReader("src/test/resources/support/scenarioData.json");
+        FileReader reader = new FileReader("src/main/resources/support/scenarioData.json");
         JSONParser parser = new JSONParser();
         JSONObject data = (JSONObject) parser.parse(reader);
 
@@ -76,5 +74,16 @@ public class BankingTests {
         bankingSteps.validateBalances(driver, "0");
         bankingSteps.checkTransactionCreated(driver, (String)data.get("withdrawalAmount"), "Debit");
         bankingSteps.logout(driver);
+    }
+
+    @Test
+    public void unsuccessfulWithdrawal(){
+        bankingSteps.loginAsCustomer(driver);
+        bankingSteps.selectCustomer(driver, 1);
+        bankingSteps.clearAllTransactions(driver);
+        bankingSteps.doWithdrawal(driver, "1500");
+        bankingSteps.unsuccessfulWithdrawal(driver);
+        bankingSteps.logout(driver);
+
     }
 }

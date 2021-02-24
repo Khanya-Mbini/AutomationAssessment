@@ -12,14 +12,14 @@ import java.util.List;
 public class BankingSteps {
 
     @Step
-    public void loginAsCustomer(WebDriver driver){
+    public void loginAsCustomer(WebDriver driver) {
         driver.get("http://www.way2automation.com/angularjs-protractor/banking/#/login");
         WebElement loginButton = driver.findElement(By.xpath(("//button[@ng-click='customer()']")));
         loginButton.click();
     }
 
     @Step
-    public void selectCustomer(WebDriver driver, int customerIndex){
+    public void selectCustomer(WebDriver driver, int customerIndex) {
         Select selectInput = new Select(driver.findElement(By.id(("userSelect"))));
         selectInput.selectByIndex(customerIndex);
         WebElement loginButton = driver.findElement(By.xpath(("//button[@type='submit']")));
@@ -27,7 +27,7 @@ public class BankingSteps {
     }
 
     @Step
-    public void selectCustomerAccount(WebDriver driver, int accountIndex){
+    public void selectCustomerAccount(WebDriver driver, int accountIndex) {
         Select selectInput = new Select(driver.findElement(By.id(("accountSelect"))));
         selectInput.selectByIndex(accountIndex);
     }
@@ -44,20 +44,20 @@ public class BankingSteps {
     }
 
     @Step
-    public void depositIsSuccessful(WebDriver driver){
+    public void depositIsSuccessful(WebDriver driver) {
         WebElement span = driver.findElement(By.xpath("//span[@ng-show='message']"));
         String message = span.getAttribute("textContent");
         Assert.assertEquals("Deposit Successful", message);
     }
 
     @Step
-    public void logout(WebDriver driver){
+    public void logout(WebDriver driver) {
         WebElement logoutButton = driver.findElement(By.xpath("//button[@ng-click='byebye()']"));
         logoutButton.click();
     }
 
     @Step
-    public void doWithdrawal(WebDriver driver, String withdrawalAmount){
+    public void doWithdrawal(WebDriver driver, String withdrawalAmount) {
         WebElement activityButton = driver.findElement(By.xpath("//button[@ng-click='withdrawl()']"));
         activityButton.click();
 
@@ -68,7 +68,7 @@ public class BankingSteps {
     }
 
     @Step
-    public void checkTransactionCreated(WebDriver driver, String transactionAmount, String transactionType){
+    public void checkTransactionCreated(WebDriver driver, String transactionAmount, String transactionType) {
         WebElement activityButton = driver.findElement(By.xpath("//button[@ng-click='transactions()']"));
         activityButton.click();
 
@@ -83,11 +83,11 @@ public class BankingSteps {
     }
 
     @Step
-    public void clearAllTransactions(WebDriver driver){
+    public void clearAllTransactions(WebDriver driver) {
         WebElement activityButton = driver.findElement(By.xpath("//button[@ng-click='transactions()']"));
         activityButton.click();
         WebElement clearButton = driver.findElement(By.xpath("//button[@ng-click='reset()']"));
-        if(clearButton != null){
+        if (clearButton != null) {
             clearButton.click();
         }
         WebElement backButton = driver.findElement(By.xpath("//button[@ng-click='back()']"));
@@ -95,8 +95,18 @@ public class BankingSteps {
     }
 
     @Step
-    public void validateBalances(WebDriver driver, String expectedBalance){
+    public void validateBalances(WebDriver driver, String expectedBalance) {
         WebElement balanceStrong = driver.findElements(By.xpath("//div[@class='center']/strong")).get(1);
         Assert.assertEquals(expectedBalance, balanceStrong.getAttribute("textContent"));
     }
+
+    @Step
+    public void unsuccessfulWithdrawal(WebDriver driver) {
+
+        WebElement span = driver.findElement(By.xpath("//span[@ng-show='message']"));
+        String message = span.getAttribute("textContent");
+        Assert.assertEquals("Transaction Failed. You can not withdraw amount more than the balance.", message);
+
+    }
+
 }
