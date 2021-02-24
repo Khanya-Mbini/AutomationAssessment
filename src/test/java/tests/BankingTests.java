@@ -82,6 +82,5 @@ public class BankingTests {
         bankingSteps.doWithdrawal("1500");
         bankingSteps.unsuccessfulWithdrawal();
         bankingSteps.logout();
-
     }
 }
