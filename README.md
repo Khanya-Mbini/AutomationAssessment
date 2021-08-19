@@ -36,7 +36,8 @@ To use firefox without changing the properties run: `mvn clean verify -Dwebdrive
 
 There is an occasional failure in the `testWithJSONData` and `performMultipleTransactions` tests on the `checkTransactionCreated` Step. 
 This seems to be a bug in the app where the transactions on the account do not load correctly on the page.
-#Tools used
+
+# Tools used
 
 [Maven](https://maven.apache.org/)
 
